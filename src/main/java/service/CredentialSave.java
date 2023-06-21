@@ -10,9 +10,7 @@ public class CredentialSave {
 	
 
 
-	private static String email = "f.scarmozzino@3em.it";
-	private static String smtpUser = "smtp@3em.it";
-	private static String smtpPassword = "qCcHVn4WbgVwckW@";
+	
 	
 	
 	public static void setEmail(String email) {
