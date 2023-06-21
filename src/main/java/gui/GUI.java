@@ -1,4 +1,4 @@
-package service;
+package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -44,6 +44,8 @@ import javax.swing.LayoutStyle;
 import javax.swing.SwingConstants;
 
 import control.FileUtils;
+import service.CredentialSave;
+import service.SendMail;
 
 @SuppressWarnings("serial")
 public class GUI extends JFrame implements ActionListener {
@@ -70,7 +72,7 @@ public class GUI extends JFrame implements ActionListener {
     public GUI() {
 
     	//carica credenziali
-    	SendMail.setCredenziali();
+    	CredentialSave.setCredenziali();
     	
     	// pannello
     	JPanel panel = new JPanel();

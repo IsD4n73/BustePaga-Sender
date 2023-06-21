@@ -1,4 +1,4 @@
-package service;
+package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -21,6 +21,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import service.CredentialSave;
+
 
 @SuppressWarnings("serial")
 public class ImpostazioniGUI  extends JFrame implements ActionListener {
@@ -28,9 +30,11 @@ public class ImpostazioniGUI  extends JFrame implements ActionListener {
 	
 	
 	private JTextField email = new JTextField();
+	private JTextField user = new JTextField();
     private JLabel mailtxt = new JLabel();
     private JTextField password = new JTextField();
-    private JLabel pswLabel = new JLabel();;
+    private JLabel pswLabel = new JLabel();
+    private JLabel userLabel = new JLabel();
     private JButton submit = new JButton();
     private JLabel titolo = new JLabel();;
     private JFrame frame = new JFrame();
@@ -40,7 +44,8 @@ public class ImpostazioniGUI  extends JFrame implements ActionListener {
 		
 		
 		// carica email
-		email.setText(SendMail.getEmail());
+		email.setText(CredentialSave.getEmail());
+		user.setText(CredentialSave.getSmtpUser());
 				
 		// pannello
     	JPanel panel = new JPanel();
@@ -68,8 +73,13 @@ public class ImpostazioniGUI  extends JFrame implements ActionListener {
         
         //label password
         pswLabel.setFont(new Font("Dialog", 1, 18)); 
-        pswLabel.setText("Password");
+        pswLabel.setText("Password SMTP");
         panel.add(pswLabel);
+        
+        //label user
+        userLabel.setFont(new Font("Dialog", 1, 18)); 
+        userLabel.setText("Username SMTP");
+        panel.add(userLabel);
         
         // label titolo
         titolo.setFont(new Font("Dialog", 1, 24)); 
@@ -92,10 +102,12 @@ public class ImpostazioniGUI  extends JFrame implements ActionListener {
                         .addGap(41, 41, 41)
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                             .addComponent(pswLabel)
+                            .addComponent(userLabel)
                             .addComponent(mailtxt))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                             .addComponent(email)
+                            .addComponent(user)
                             .addComponent(password, GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
@@ -112,6 +124,10 @@ public class ImpostazioniGUI  extends JFrame implements ActionListener {
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(mailtxt)
                     .addComponent(email, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(userLabel)
+                        .addComponent(user, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(pswLabel)
@@ -152,10 +168,12 @@ public class ImpostazioniGUI  extends JFrame implements ActionListener {
 		
 		try {
 			p.setProperty("email", email.getText());
-			p.setProperty("password", password.getText());
+			p.setProperty("smtpPassword", password.getText());
+			p.setProperty("smtpUser", user.getText());
+			
 			p.store(new FileWriter(System.getenv("APPDATA") + "/bp3em.properties"), "");
 			JOptionPane.showMessageDialog(null, "Credenziali Salvate");
-			SendMail.setCredenziali();
+			CredentialSave.setCredenziali();
 			frame.dispose();
 		} catch (IOException e) {
 			e.printStackTrace();

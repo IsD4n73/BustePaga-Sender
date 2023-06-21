@@ -12,12 +12,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.text.WordUtils;
-import service.GUI;
+
+import gui.GUI;
 
 public class FileUtils {
 
 
-	private static String urlFile = "https://raw.githubusercontent.com/domenicolubrano/BP/main/src/main/resources/mail.csv"; // file con tutte le email
+	private static String urlFile = "https://raw.githubusercontent.com/IsD4n73/BustePaga-Sender/main/src/main/resources/mail.csv" ; // file con tutte le email
 	public static String urlGuida = "https://github.com/domenicolubrano/BP/files/9937694/Guida.Buste.Paga.Sender.pdf"; // url alla guida
 
 

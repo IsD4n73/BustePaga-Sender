@@ -1,8 +1,6 @@
 package service;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -19,10 +17,11 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import gui.GUI;
+
 public class SendMail {
 	
-	private static String email = "d.lubranolobianco@3em.it";
-	private static String password = "DmcLbLb@12";
+	
 
 	public static void send(String destinatario, String oggetto, String allegato){
 
@@ -30,18 +29,21 @@ public class SendMail {
 	
 	prop.put("mail.smtp.auth", true);
 	prop.put("mail.smtp.starttls.enable", "false");
-	prop.put("mail.smtp.host", "pop.3em.it");
-	//prop.put("mail.smtp.host", "authsmtp.securemail.pro");
+	//prop.put("mail.smtp.host", "pop.3em.it");
+	prop.put("mail.smtp.host", "authsmtp.3em.it");
 	prop.put("mail.smtp.port", "25");
+	
+	prop.put("mail.from", CredentialSave.getEmail());
+	prop.put("mail.user", CredentialSave.getSmtpUser());
+	
 	prop.put("mail.smtp.ssl.trust", "smtp.gmail.com");
 	prop.put("mail.smtp.ssl.trust", "authsmtp.3em.it");
-	prop.put("mail.smtp.ssl.trust", "authsmtp.securemail.pro");
 	
 	
 	Session session = Session.getInstance(prop, new Authenticator() {
 	    @Override
 	    protected PasswordAuthentication getPasswordAuthentication() {
-	        return new PasswordAuthentication(email, password);
+	        return new PasswordAuthentication(CredentialSave.getSmtpUser(), CredentialSave.getSmtpPassword());
 	    }
 	});
 	
@@ -50,7 +52,7 @@ public class SendMail {
 	
 	// chi invia la mail
 	try {
-		message.setFrom(new InternetAddress(email));
+		message.setFrom(new InternetAddress(CredentialSave.getEmail()));
 		
 	} catch (AddressException e1) {
 		GUI.logTextArea.append(" [ERRORE] ==> " + e1.getMessage() + "\n\n");
@@ -111,7 +113,7 @@ public class SendMail {
 			"Via Antiniana, 2/G\r\n" + 
 			"80078 Pozzuoli (NA)<br>\r\n" + 
 			"ITALY<br><br>\r\n" + 
-			"Phone:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+39 081 5234193<br>\r\n" + 
+			"Phone:&nbsp;&nbsp;&nbsp;&nbsp;+39 081 5234193<br>\r\n" + 
 			"Fax:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+39 081 8531552\r\n<br>" + 
 			"Mail:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;info@3em.it\r\n<br>" + 
 			"Site:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;www.3em.it\r\n<br><br><br>" + 
@@ -120,7 +122,7 @@ public class SendMail {
 			"\r\n" + 
 			"Il presente messaggio e gli eventuali suoi allegati sono di natura aziendale, prevalentemente confidenziale e sono visionabili solo dal destinatario di posta elettronica. La risposta o l&#39;eventuale invio spontaneo da parte vostra di e-mail al nostro indirizzo potrebbero non assicurare la confidenzialita&#39; potendo essere viste da altri soggetti appartenenti all&#39;Azienda oltre che al firmatario della presente, per finalit&agrave; di sicurezza informatica, amministrative e allo scopo del continuo svolgimento dell&#39;attivit&agrave; aziendale. Qualora questo messaggio vi fosse pervenuto per errore, vi preghiamo di cancellarlo dal vostro sistema e vi chiediamo di volercene dare cortesemente comunicazione al mittente.\r\n<br>" + 
 			"\r\n" + 
-			"La Vs. mail &egrave; in ns. possesso in quanto da Voi fornitaci tramite comunicazione scritta, telefonica, telematica o direttamente oralmente. Essa &egrave; utilizzata esclusivamente per fornirVi informazioni sulla ns. attivit&agrave; e sui servizi da noi offerti. Non sar&agrave; ceduta a terzi in nessun caso salvo approvazione da parte Vostra. Il Titolare del trattamento &egrave;��<b>TRE EMME ENGINEERING S.R.L.</b> I ns. sistemi informativi e le ns. procedure interne sono conformi alle norme e garantiamo la presenza di adeguate misure tecniche ed organizzative costantemente aggiornate.<br>\r\n" + 
+			"La Vs. mail &egrave; in ns. possesso in quanto da Voi fornitaci tramite comunicazione scritta, telefonica, telematica o direttamente oralmente. Essa &egrave; utilizzata esclusivamente per fornirVi informazioni sulla ns. attivit&agrave; e sui servizi da noi offerti. Non sar&agrave; ceduta a terzi in nessun caso salvo approvazione da parte Vostra. Il Titolare del trattamento &egrave; <b>TRE EMME ENGINEERING S.R.L.</b> I ns. sistemi informativi e le ns. procedure interne sono conformi alle norme e garantiamo la presenza di adeguate misure tecniche ed organizzative costantemente aggiornate.<br>\r\n" + 
 			"\r\n" + 
 			"E' possibile in qualsiasi momento richiedere la cancellazione della Vs. mail tramite il semplice invio di una mail a.info@3em.it"
 			+"</sub>";
@@ -187,32 +189,7 @@ public class SendMail {
 	
 }
 	
-	
-	public static void setEmail(String email) {
-		SendMail.email = email;
-	}
-	
-	public static void setPassword(String password) {
-		SendMail.password = password;
-	}
-	
-	public static String getEmail() {
-		return email;
-	}
-	
-	
-	public static void setCredenziali() {
-		Properties p = new Properties();
-		try {
-			p.load(new FileReader(System.getenv("APPDATA") + "/bp3em.properties"));
-			email = p.getProperty("email");
-			password = p.getProperty("password");
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+
 	
 	
 }
