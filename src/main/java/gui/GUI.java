@@ -61,6 +61,7 @@ public class GUI extends JFrame implements ActionListener {
     private static JLabel labelIstruzioni2 = new JLabel();
     private static JLabel labelSuccess = new JLabel();
     private static JMenuItem accountSettings = new JMenuItem();
+    private static JMenuItem otherSettings = new JMenuItem();
     private static JMenuItem scaricaGuida = new JMenuItem();
     private static JMenuBar jMenuBar = new JMenuBar();
     private static JMenu settingMenu = new JMenu();
@@ -79,6 +80,7 @@ public class GUI extends JFrame implements ActionListener {
     	panel.setBackground(new Color(255, 255, 255));
         panel.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
         panel.setLayout(new GridLayout(0, 1));
+        JScrollPane scrollPanel = new JScrollPane(panel);
 
     	
     	// bottone invia BP
@@ -212,6 +214,7 @@ public class GUI extends JFrame implements ActionListener {
         );
         panel.setLayout(layout);
         
+        
         barraProgresso.setForeground(new Color(22,158,255));
         
         // set icona
@@ -243,7 +246,19 @@ public class GUI extends JFrame implements ActionListener {
                 accountSettingLogActionPerformed(evt);
             }
         });
+        
+        otherSettings.setText("Altro");
+        otherSettings.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        otherSettings.setFont(new Font("Arial", 1, 15));
+        otherSettings.setBackground(new Color(22,158,255));
+        otherSettings.setForeground(new Color(255,255,255));
+        otherSettings.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                otherSettingLogActionPerformed(evt);
+            }
+        });
         settingMenu.add(accountSettings);
+        settingMenu.add(otherSettings);
         
         helpMenu.setText("Guida");
         helpMenu.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -272,15 +287,12 @@ public class GUI extends JFrame implements ActionListener {
         frame.setJMenuBar(jMenuBar);
         
         // set up frame
-        frame.add(panel, BorderLayout.CENTER);
+        frame.add(scrollPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("Buste Paga");
         frame.setMinimumSize(new Dimension(1250,730));
         frame.pack();
         frame.setVisible(true);
-        
-        
-  
         
     }
     
@@ -299,6 +311,8 @@ public class GUI extends JFrame implements ActionListener {
 	    List<String> files = FileUtils.getFileName(new File("."));  // ricerca file
 	    barraProgresso.setMaximum(files.size());
 	    int contaFileFatti = 0;
+	    int inviiRiusciti = 0;
+	    int inviiFalliti = 0;
 	    
 	    logTextArea.append("\n [INFO] -> Nessun altro file trovato\n\n");
 	        
@@ -318,12 +332,15 @@ public class GUI extends JFrame implements ActionListener {
 	        
 	        if(erroreSingolo == false) {
 	        	try {
+	        		inviiRiusciti++;
 					Files.move(Paths.get(file), Paths.get("Inviate/" + file), StandardCopyOption.REPLACE_EXISTING);
 				} catch (IOException e1) {
 					e1.printStackTrace();
 					logTextArea.append("\n [INFO] -> Non e stato possibile spostare il file inviato(" + file + ")\n [ERRORE] -> " + e1.getMessage());
 				}
-	        }     
+	        }else {
+	        	inviiFalliti++;
+	        }
 	        
 	    }
 	    
@@ -334,11 +351,11 @@ public class GUI extends JFrame implements ActionListener {
 	    
 	    // controllo errori
 	    if(errore == false) {
-	    	labelSuccess.setText("Buste Paga inviate correttamente!");
+	    	labelSuccess.setText("Buste Paga inviate correttamente! (Inviati: " + inviiRiusciti + ")");
 	        labelSuccess.setForeground(new Color(0,255,0));
 	    	labelSuccess.setVisible(true);
 	    }else {
-	    	labelSuccess.setText("Si sono verificati degli errori, controlla il log");
+	    	labelSuccess.setText("Si sono verificati degli errori, controlla il log (Inviati: " + inviiRiusciti + " Falliti: " + inviiFalliti + ")");
 	    	labelSuccess.setForeground(new Color(255,0,0));
 	    	labelSuccess.setVisible(true);
 			JOptionPane.showMessageDialog(null, "Sono presenti degli errori, clicca su \"Salva Log\" e contatta Domenico Lubrano\n\n"
@@ -388,6 +405,11 @@ public class GUI extends JFrame implements ActionListener {
     // impostazioni account premuto
     private void accountSettingLogActionPerformed(ActionEvent evt) {
 		new ImpostazioniGUI();
+	}
+    
+    // impostazioni altro premuto
+    private void otherSettingLogActionPerformed(ActionEvent evt) {
+		new ImpostazioniAltroGUI();
 		
 	}
 

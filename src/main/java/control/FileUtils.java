@@ -14,6 +14,7 @@ import java.util.Map;
 import org.apache.commons.text.WordUtils;
 
 import gui.GUI;
+import service.CredentialSave;
 
 public class FileUtils {
 
@@ -53,9 +54,9 @@ public class FileUtils {
 		String[] ogg = file.split("-");
 
 		try {
-			return "Busta Paga: " + ogg[1];
+			return CredentialSave.getOggetto() + " " + ogg[1];
 		}catch(Exception e) {
-			return "Busta Paga";
+			return CredentialSave.getOggetto();
 		}
 
 	}
